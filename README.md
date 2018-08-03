@@ -15,3 +15,13 @@ pip install -r requirements.txt
 ```bash
 python main.py
 ```
+
+### Play instructions
+You, the character, are represented by the `@` symbol.
+
+| Key | Action |
+| --- | ------ |
+| `UP` | Moves the character up |
+| `DOWN` | Moves the character down |
+| `RIGHT` | Moves the character right |
+| `LEFT` | Moves the character left |
