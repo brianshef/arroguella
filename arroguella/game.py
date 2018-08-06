@@ -1,4 +1,5 @@
 import tdl
+from arroguella.player import player as p
 
 # Constants
 SCREEN_WIDTH = 85
@@ -6,14 +7,12 @@ SCREEN_HEIGHT = 55
 FONT='arroguella/fonts/consolas_unicode_12x12.png'
 LIMIT_FPS = 20
 REALTIME = True
+DEFAULT_BG = (30, 30, 40)
+DEFAULT_FG = (220, 220, 220)
 
 # Game engine variables
+player = None
 console = None
-playerchar = '@'
-player_fg = (255, 255, 255)
-emptychar = ' '
-playerx = SCREEN_WIDTH//2
-playery = SCREEN_HEIGHT//2
 
 
 def handle_realtime_keys():
@@ -28,7 +27,6 @@ def handle_turnbased_keys():
 
 
 def handle_keys():
-    global playerx, playery
     user_input = handle_realtime_keys() if REALTIME else handle_turnbased_keys()
     if not user_input:
         return
@@ -36,34 +34,24 @@ def handle_keys():
         tdl.set_fullscreen(not tdl.get_fullscreen())
     elif user_input.key == 'ESCAPE':
         return True  # exit game
-    if user_input.key == 'UP':
-        playery -= 1
-    elif user_input.key == 'DOWN':
-        playery += 1
-    elif user_input.key == 'LEFT':
-        playerx -= 1
-    elif user_input.key == 'RIGHT':
-        playerx += 1
-
-
-def draw_char(display=True):
-    if display:
-        console.draw_char(playerx, playery, playerchar, bg=None, fg=player_fg)
-    else:
-        console.draw_char(playerx, playery, emptychar, bg=None)
+    player.handle_key(key=user_input.key)
 
 
 def update_char():
-    draw_char(display=True)
+    console.draw_char(player.x, player.y, player.appearance, bg=DEFAULT_BG, fg=player.color)
     tdl.flush()
-    draw_char(display=False)
+    console.draw_char(player.x, player.y, ' ', bg=DEFAULT_BG)
 
 
 def initialize():
-    global console
+    global console, player
+    # Set up console
     tdl.set_font(FONT, greyscale=False, altLayout=False)
-    console = tdl.init(SCREEN_WIDTH, SCREEN_HEIGHT, title="Arroguella", fullscreen=False)
     tdl.setFPS(LIMIT_FPS)
+    console = tdl.init(SCREEN_WIDTH, SCREEN_HEIGHT, title="Arroguella", fullscreen=False)
+    console.clear(fg=DEFAULT_FG, bg=DEFAULT_BG)
+    # Set up player
+    player = p.Player(start_x=(SCREEN_WIDTH//2), start_y=(SCREEN_HEIGHT//2))
 
 
 def run_main_loop():
