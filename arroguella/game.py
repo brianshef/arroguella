@@ -12,8 +12,8 @@ DEFAULT_FG = (220, 220, 220)
 
 # Game engine variables
 player = None
-console = None
-
+root = None
+con = None
 
 def handle_realtime_keys():
     for event in tdl.event.get():
@@ -37,19 +37,31 @@ def handle_keys():
     player.handle_key(key=user_input.key)
 
 
+# blit the contents of the src console to the dst console, to display them.
+# source rectangle has its top-left corner at coordinates (0, 0)
+# and is the same size as the screen;
+# the destination coordinates are (0, 0) as well.
+def blit(src, dst):
+    dst.blit(src, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 0, 0)
+
+
 def update_char():
-    console.draw_char(player.x, player.y, player.appearance, bg=DEFAULT_BG, fg=player.color)
+    con.draw_char(player.x, player.y, player.appearance, bg=DEFAULT_BG, fg=player.color)
+    blit(con, root)
     tdl.flush()
-    console.draw_char(player.x, player.y, ' ', bg=DEFAULT_BG)
+    con.draw_char(player.x, player.y, ' ', bg=DEFAULT_BG)
 
 
 def initialize():
-    global console, player
+    global root, con, player
     # Set up console
     tdl.set_font(FONT, greyscale=False, altLayout=False)
     tdl.setFPS(LIMIT_FPS)
-    console = tdl.init(SCREEN_WIDTH, SCREEN_HEIGHT, title="Arroguella", fullscreen=False)
-    console.clear(fg=DEFAULT_FG, bg=DEFAULT_BG)
+    # Root Console
+    root = tdl.init(SCREEN_WIDTH, SCREEN_HEIGHT, title="Arroguella", fullscreen=False)
+    # Game Console
+    con = tdl.Console(SCREEN_WIDTH, SCREEN_HEIGHT)
+    con.clear(fg=DEFAULT_FG, bg=DEFAULT_BG)
     # Set up player
     player = p.Player(start_x=(SCREEN_WIDTH//2), start_y=(SCREEN_HEIGHT//2))
 
