@@ -13,12 +13,12 @@ class Player(obj.GameObject):
 
 
     # Movement
-    def handle_key(self, key=None):
+    def handle_key(self, key, tile_map):
         if key == 'UP':
-            self.move(0, -1)
+            self.move(0, -1, tile_map)
         elif key == 'DOWN':
-            self.move(0, 1)
+            self.move(0, 1, tile_map)
         elif key == 'LEFT':
-            self.move(-1, 0)
+            self.move(-1, 0, tile_map)
         elif key == 'RIGHT':
-            self.move(1, 0)
+            self.move(1, 0, tile_map)

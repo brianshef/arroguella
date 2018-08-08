@@ -1,6 +1,6 @@
 import tdl
 from arroguella.objects import player as p, game_object as obj
-
+from arroguella.map import map as m
 # Constants
 SCREEN_WIDTH = 85
 SCREEN_HEIGHT = 55
@@ -11,6 +11,7 @@ DEFAULT_BG = (30, 30, 40)
 DEFAULT_FG = (220, 220, 220)
 
 # Game engine variables
+map = None
 objects = {}
 root = None
 con = None
@@ -34,7 +35,7 @@ def handle_keys():
         tdl.set_fullscreen(not tdl.get_fullscreen())
     elif user_input.key == 'ESCAPE':
         return True  # exit game
-    objects['player'].handle_key(key=user_input.key)
+    objects['player'].handle_key(key=user_input.key, tile_map=map.tiles)
 
 
 # blit the contents of the src console to the dst console, to display them.
@@ -45,17 +46,18 @@ def blit(src, dst):
     dst.blit(src, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 0, 0)
 
 
-def draw_objects():
+def render_all():
+    map.render(con)
     for k, v in objects.items():
-        v.draw(con, bg=DEFAULT_BG)
+        v.draw(con)
     blit(con, root)
     tdl.flush()
     for k, v in objects.items():
-        v.clear(con, bg=DEFAULT_BG)
+        v.clear(con)
 
 
 def initialize():
-    global root, con, objects
+    global root, con, objects, map
     # Set up console
     tdl.set_font(FONT, greyscale=False, altLayout=False)
     tdl.setFPS(LIMIT_FPS)
@@ -64,6 +66,8 @@ def initialize():
     # Game Console
     con = tdl.Console(SCREEN_WIDTH, SCREEN_HEIGHT)
     con.clear(fg=DEFAULT_FG, bg=DEFAULT_BG)
+    # Set up map
+    map = m.Map(width=SCREEN_WIDTH, height=SCREEN_HEIGHT)
     # Set up initial objects
     npc = obj.GameObject(SCREEN_WIDTH//2 - 5, SCREEN_HEIGHT//2, '@', (255,90,0))
     player = p.Player(SCREEN_WIDTH//2, SCREEN_HEIGHT//2)
@@ -74,7 +78,7 @@ def initialize():
 
 def run_main_loop():
     while not tdl.event.is_window_closed():
-        draw_objects()
+        render_all()
         exit_game = handle_keys()
         if exit_game:
             break
