@@ -69,8 +69,8 @@ def initialize():
     # Set up map
     map = m.Map(width=SCREEN_WIDTH, height=SCREEN_HEIGHT)
     # Set up initial objects
-    npc = obj.GameObject(SCREEN_WIDTH//2 - 5, SCREEN_HEIGHT//2, '@', (255,90,0))
-    player = p.Player(SCREEN_WIDTH//2, SCREEN_HEIGHT//2)
+    npc = obj.GameObject(x=55, y=28, char='@', color=(255,90,0))
+    player = p.Player(x=25, y=23)
     objects['player'] = player
     objects['npc'] = npc
 
