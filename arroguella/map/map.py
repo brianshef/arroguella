@@ -1,5 +1,6 @@
 from . import tile
 from . import colors
+from .geometry import rect
 
 
 class Map:
@@ -17,8 +18,8 @@ class Map:
             for y in range(self.height) ]
                 for x in range(self.width) ]
         # Make some rooms
-        self.create_room(room=Rect(20, 15, 10, 15))
-        self.create_room(room=Rect(50, 15, 10, 15))
+        self.create_room(room=rect.Rect(20, 15, 10, 15))
+        self.create_room(room=rect.Rect(50, 15, 10, 15))
         self.create_h_tunnel(25, 55, 23)
 
 
@@ -53,12 +54,3 @@ class Map:
     def create_v_tunnel(self, y1, y2, x):
         for y in range(min(y1, y2), max(y1, y2) + 1):
             self.set_tile_blocked(x, y, blocked=False)
-
-
-class Rect:
-    # A rectangle on the map. Used to characterize a room.
-    def __init__(self, x, y, w, h):
-        self.x1 = x
-        self.y1 = y
-        self.x2 = x + w
-        self.y2 = y + h
