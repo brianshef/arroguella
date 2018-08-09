@@ -3,9 +3,8 @@ from . import game_object as obj
 class Monster(obj.GameObject):
     # Constructor
     def __init__(self, x=0, y=0, char='X', color=(205, 55, 0), name='monster'):
-        super().__init__(x, y, char, color)
+        super().__init__(x, y, char, color, name, blocks=True)
         # Basic Info
-        self.name = name
         self.spotted = False
 
 

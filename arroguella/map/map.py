@@ -69,8 +69,10 @@ class Map:
 
     def place_monsters(self, room):
         for i in range(randint(0, MAX_ROOM_MONSTERS)):
-            x = randint(room.x1, room.x2 - 1)
-            y = randint(room.y1, room.y2 - 1)
+            x = randint(room.x1 + 1, room.x2 - 1)
+            y = randint(room.y1 + 1, room.y2 - 1)
+            if self.is_blocked(x, y):
+                continue
             choice = randint(0, 100)
             if choice < 80:
                 name = 'orc'
@@ -97,6 +99,16 @@ class Map:
             return True
         else:
             return True
+
+
+    # Tests whether or not the tile at the coordinates is blocked
+    def is_blocked(self, x, y):
+        if self.tiles[x][y].blocked:
+            return True
+        for k, v in self.objects.items():
+            if v.blocks and v.x ==x and v.y == y:
+                return True
+        return False
 
 
     def render(self, console, visible_tiles):

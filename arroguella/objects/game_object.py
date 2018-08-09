@@ -1,20 +1,22 @@
 class GameObject:
     # this is a generic object: the player, a monster, an item, the stairs...
     # it's always represented by a character on screen.
-    def __init__(self, x, y, char, color, name=None):
+    def __init__(self, x, y, char, color, name=None, blocks=False):
         self.x = x
         self.y = y
         self.char = char
         self.color = color
         self.name = name
+        self.blocks = blocks
 
 
-    def move(self, dx, dy, tile_map):
-        # move by the given amount, IFF the tile is not blocked
-        tile = tile_map[self.x + dx][self.y + dy]
-        if not tile.blocked:
+    def move(self, dx, dy, map):
+        # move by the given amount, if the tile is not blocked
+        if not map.is_blocked(self.x + dx, self.y + dy):
             self.x += dx
             self.y += dy
+        else:
+            print("You can't walk there!")
 
 
     def draw(self, console, visible_tiles, bg=None):

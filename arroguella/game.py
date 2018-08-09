@@ -38,7 +38,7 @@ def handle_keys():
         tdl.set_fullscreen(not tdl.get_fullscreen())
     elif user_input.key == 'ESCAPE':
         return True  # exit game
-    moved = objects['player'].handle_key(key=user_input.key, tile_map=map.tiles)
+    moved = objects['player'].handle_key(key=user_input.key, map=map)
 
 
 # Use the map object to calculate whether or not a tile at the coordinates is visible

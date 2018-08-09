@@ -18,15 +18,15 @@ class Player(obj.GameObject):
 
     # Movement according to user input
     # Return whether or not the player moved based on the key input
-    def handle_key(self, key, tile_map):
+    def handle_key(self, key, map):
         if key == 'UP':
-            self.move(0, -1, tile_map)
+            self.move(0, -1, map)
         elif key == 'DOWN':
-            self.move(0, 1, tile_map)
+            self.move(0, 1, map)
         elif key == 'LEFT':
-            self.move(-1, 0, tile_map)
+            self.move(-1, 0, map)
         elif key == 'RIGHT':
-            self.move(1, 0, tile_map)
+            self.move(1, 0, map)
         else:
             return False
         return True
