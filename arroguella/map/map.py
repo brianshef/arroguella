@@ -1,5 +1,5 @@
 from . import tile
-from . import colors
+from arroguella import colors as colors
 from .geometry import rect
 from random import randint
 
@@ -90,15 +90,15 @@ class Map:
                     # If it's not visible right now, the player can only see it if it's explored
                     if self.tiles[x][y].explored:
                         if wall:
-                            console.draw_char(x, y, char, fg=colors.WALLS['dark_wall_fg'], bg=colors.WALLS['dark_wall_bg'])
+                            console.draw_char(x, y, char, fg=colors.darker_grey, bg=colors.darkest_grey)
                         else:
-                            console.draw_char(x, y, char, fg=colors.TERRAIN['dark_ground_fg'], bg=colors.TERRAIN['dark_ground_bg'])
+                            console.draw_char(x, y, char, fg=colors.grey, bg=colors.dark_grey)
                 else:
                     # It's visible in FOV / it's light
                     if wall:
-                        console.draw_char(x, y, char, fg=colors.WALLS['light_wall_fg'], bg=colors.WALLS['light_wall_bg'])
+                        console.draw_char(x, y, char, fg=colors.grey, bg=colors.dark_grey)
                     else:
-                        console.draw_char(x, y, char, fg=colors.TERRAIN['light_ground_fg'], bg=colors.TERRAIN['light_ground_bg'])
+                        console.draw_char(x, y, char, fg=colors.lighter_grey, bg=colors.light_grey)
                     # Since it's visible, explore it:
                     self.tiles[x][y].explored = True
 
