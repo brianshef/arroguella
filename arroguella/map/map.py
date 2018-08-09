@@ -1,6 +1,12 @@
 from . import tile
 from . import colors
 from .geometry import rect
+from random import randint
+
+
+ROOM_MAX_SIZE = 26
+ROOM_MIN_SIZE = 5
+MAX_ROOMS = 26
 
 
 class Map:
@@ -8,7 +14,9 @@ class Map:
     def __init__(self, width=85, height=50):
         self.width = width
         self.height = height
+        self.rooms = {}
         self.tiles = {}
+        self.player_start = (width//2, height//2)
         self.make_map()
 
 
@@ -18,9 +26,42 @@ class Map:
             for y in range(self.height) ]
                 for x in range(self.width) ]
         # Make some rooms
-        self.create_room(room=rect.Rect(20, 15, 10, 15))
-        self.create_room(room=rect.Rect(50, 15, 10, 15))
-        self.create_h_tunnel(25, 55, 23)
+        for r in range(MAX_ROOMS):
+            w = randint(ROOM_MIN_SIZE, ROOM_MAX_SIZE)
+            h = randint(ROOM_MIN_SIZE, ROOM_MAX_SIZE)
+            x = randint(0, self.width-w-1)
+            y = randint(0, self.height-h-1)
+            new_room = rect.Rect(x, y, w, h)
+            failed = False
+            for other_room in list(self.rooms.values()):
+                if new_room.intersect(other_room):
+                    failed = True
+                    break
+            if not failed:
+                self.create_room(room=new_room)
+                (new_x, new_y) = new_room.center()
+                if len(self.rooms) == 0:
+                    # this is the first room, where the player starts at
+                    self.player_start = (new_x, new_y)
+                else:
+                    # all rooms after the first:
+                    # connect it to the previous room with a tunnel
+                    # center coordinates of previous room
+                    (prev_x, prev_y) = list(self.rooms.values())[len(self.rooms)-1].center()
+                    if randint(0, 1):
+                        # first move horizontally, then vertically
+                        self.create_h_tunnel(prev_x, new_x, prev_y)
+                        self.create_v_tunnel(prev_y, new_y, new_x)
+                    else:
+                        # first move vertically, then horizontally
+                        self.create_v_tunnel(prev_y, new_y, prev_x)
+                        self.create_h_tunnel(prev_x, new_x, new_y)
+
+                # finally, append the new room to the list
+                self.rooms[chr(65+len(self.rooms))] = new_room
+        # # Debug:
+        # for k, v in self.rooms.items(): print(k, v.center())
+
 
 
     def set_tile_blocked(self, x, y, blocked=True):
