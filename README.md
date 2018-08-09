@@ -2,6 +2,8 @@
 
 A procedurally-generated Roguelike written in Python3
 
+![Arroguella](screenshots/game.png)
+
 ## Set up
 
 ```bash

@@ -68,9 +68,12 @@ def initialize():
     con.clear(fg=DEFAULT_FG, bg=DEFAULT_BG)
     # Set up map
     map = m.Map(width=SCREEN_WIDTH, height=SCREEN_HEIGHT)
+    # # Optional: Print room labels
+    # for k, r in map.rooms.items():
+    #     objects[k] = obj.GameObject(*r.center(), k, color=(20, 20, 20))
     # Set up initial objects
-    npc = obj.GameObject(SCREEN_WIDTH//2 - 5, SCREEN_HEIGHT//2, '@', (255,90,0))
-    player = p.Player(SCREEN_WIDTH//2, SCREEN_HEIGHT//2)
+    npc = obj.GameObject(x=55, y=28, char='@', color=(255,90,0))
+    player = p.Player(*map.player_start)
     objects['player'] = player
     objects['npc'] = npc
 

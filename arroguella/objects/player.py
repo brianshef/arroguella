@@ -4,7 +4,7 @@ from . import game_object as obj
 class Player(obj.GameObject):
     """Player class represents the player character."""
     # Constructor
-    def __init__(self, x, y, char='@', color=(255, 255, 255), name='Frodo Baggins'):
+    def __init__(self, x=0, y=0, char='@', color=(255, 255, 255), name='Frodo Baggins'):
         super().__init__(x, y, char, color)
         # Basic Info
         self.name = name
