@@ -8,7 +8,7 @@ SCREEN_WIDTH = 85
 SCREEN_HEIGHT = 55
 FONT='arroguella/fonts/consolas_unicode_12x12.png'
 LIMIT_FPS = 20
-REALTIME = True
+REALTIME = False
 FOV_ALGO = 'BASIC'
 FOV_LIGHT_WALLS = True
 TORCH_RADIUS = 10
@@ -83,6 +83,7 @@ def initialize():
     con.clear(fg=(0,0,0), bg=(0,0,0))
     # Set up map
     map = m.Map(width=SCREEN_WIDTH, height=SCREEN_HEIGHT)
+    objects = map.objects
     # # Optional: Print room labels
     # for k, r in map.rooms.items():
     #     objects[k] = obj.GameObject(*r.center(), k, color=(20, 20, 20))
