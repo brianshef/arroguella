@@ -1,6 +1,6 @@
 from . import tile
 from arroguella import colors as colors
-from arroguella.objects import game_object as obj
+from arroguella.objects import monster as monster
 from .geometry import rect
 from random import randint
 
@@ -60,17 +60,17 @@ class Map:
                         self.create_v_tunnel(prev_y, new_y, prev_x)
                         self.create_h_tunnel(prev_x, new_x, new_y)
 
-                self.place_objects(new_room)
+                self.place_monsters(new_room)
                 # finally, append the new room to the list
                 self.rooms[chr(65+len(self.rooms))] = new_room
         # # Debug:
         # for k, v in self.rooms.items(): print(k, v.center())
 
 
-    def place_objects(self, room):
+    def place_monsters(self, room):
         for i in range(randint(0, MAX_ROOM_MONSTERS)):
-            x = randint(room.x1, room.x2)
-            y = randint(room.y1, room.y2)
+            x = randint(room.x1, room.x2 - 1)
+            y = randint(room.y1, room.y2 - 1)
             choice = randint(0, 100)
             if choice < 80:
                 name = 'orc'
@@ -81,7 +81,7 @@ class Map:
                 char = 'T'
                 color = colors.darker_green
             id = name + str(i) + str(room.x1) + str(room.y1)
-            self.objects[id] = obj.GameObject(x, y, char, color, name)
+            self.objects[id] = monster.Monster(x, y, char, color, name)
 
 
     def set_tile_blocked(self, x, y, blocked=True):
