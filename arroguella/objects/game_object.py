@@ -7,6 +7,7 @@ class GameObject:
         self.char = char
         self.color = color
 
+
     def move(self, dx, dy, tile_map):
         # move by the given amount, IFF the tile is not blocked
         tile = tile_map[self.x + dx][self.y + dy]
@@ -14,9 +15,12 @@ class GameObject:
             self.x += dx
             self.y += dy
 
-    def draw(self, console, bg=None):
+
+    def draw(self, console, visible_tiles, bg=None):
         # draw the character that represents this object at its position
-        console.draw_char(self.x, self.y, self.char, self.color, bg=bg)
+        if visible_tiles is None or (self.x, self.y) in visible_tiles:
+            console.draw_char(self.x, self.y, self.char, self.color, bg=bg)
+
 
     def clear(self, console, bg=None):
         # erase the character that represents this object

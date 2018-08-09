@@ -68,14 +68,39 @@ class Map:
         self.tiles[x][y].block(blocked)
 
 
-    def render(self, console):
+    def is_visible_tile(self, x, y):
+        if x >= self.width or x < 0:
+            return False
+        elif y >= self.height or y < 0:
+            return False
+        elif self.tiles[x][y].blocked or self.tiles[x][y].block_sight:
+            return True
+        else:
+            return True
+
+
+    def render(self, console, visible_tiles):
         for y in range(self.height):
             for x in range(self.width):
+                visible = (x, y) in visible_tiles
                 wall = self.tiles[x][y].block_sight
-                bg = colors.WALLS['dark_wall_bg'] if wall else colors.TERRAIN['dark_ground_bg']
                 char = '#' if wall else '.'
-                fg = colors.WALLS['dark_wall_fg'] if wall else colors.TERRAIN['dark_ground_fg']
-                console.draw_char(x, y, char, fg=fg, bg=bg)
+                if not visible:
+                    # It's out of the player's FOV / it's dark
+                    # If it's not visible right now, the player can only see it if it's explored
+                    if self.tiles[x][y].explored:
+                        if wall:
+                            console.draw_char(x, y, char, fg=colors.WALLS['dark_wall_fg'], bg=colors.WALLS['dark_wall_bg'])
+                        else:
+                            console.draw_char(x, y, char, fg=colors.TERRAIN['dark_ground_fg'], bg=colors.TERRAIN['dark_ground_bg'])
+                else:
+                    # It's visible in FOV / it's light
+                    if wall:
+                        console.draw_char(x, y, char, fg=colors.WALLS['light_wall_fg'], bg=colors.WALLS['light_wall_bg'])
+                    else:
+                        console.draw_char(x, y, char, fg=colors.TERRAIN['light_ground_fg'], bg=colors.TERRAIN['light_ground_bg'])
+                    # Since it's visible, explore it:
+                    self.tiles[x][y].explored = True
 
 
     # Creates a rectangualr room of non-blocked tiles
